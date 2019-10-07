@@ -1,32 +1,36 @@
 let mobilenet;
-let penguin;
+let video;
+let label = '';
 
 
 /** Callbacks to wait */
 function modelReady(){
     console.log('Model is ready!!!');
-    mobilenet.predict(penguin, gotResults);
+    mobilenet.predict(gotResults);
 }
 
-function imgReady(){
-    image(penguin, 0,0, width, height);
-}
+// function imgReady(){
+//     image(penguin, 0,0, width, height);
+// }
 
 function gotResults(error, results){
     if(error){
         console.error(error);
     }else{
-        console.log(results);
-        let label = results[0].className;
+        label = results[0].className;
+        fill(255);
+        textSize(32);
+        text(label, 10, height - 20);
     }
 }
 
 function setup(){
-    createCanvas(640, 480);
-    penguin = createImg('images/penguin2.jpg', imgReady);
-    penguin.hide();
+    background(0);
+    createCanvas(640, 550);
+    video = createCapture(VIDEO);
+
     background(0);  
 
-    mobilenet = ml5.imageClassifier('MobileNet', modelReady); 
+    mobilenet = ml5.imageClassifier('MobileNet', video ,modelReady); 
 }
 
